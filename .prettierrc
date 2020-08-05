@@ -3,5 +3,5 @@ useTabs: false
 semi: false
 arrowParens: always
 singleQuote: true
-printWidth: 80
+printWidth: 100
 trailingComma: none
