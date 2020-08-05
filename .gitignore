@@ -1,0 +1,26 @@
+# dependencies
+node_modules
+npm-debug.log*
+yarn-error.log
+lerna-debug.log
+
+# production
+dist
+
+# misc
+.DS_Store
+.cache
+coverage
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# Lock files
+package-lock.json
+yarn.lock
