@@ -38,6 +38,7 @@
     "@typescript-eslint/explicit-function-return-type": 2,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/ban-types": 0,
     "no-shadow": 1,
     "prefer-const": 0,
     "jsx-quotes": 0,
