@@ -3,13 +3,13 @@
 > 使用 Immer
 
 ## 特性
-- 七十行实现 Immer 核心，draft 异步批量更新
+- 小于 70 行实现 Immer 核心，draft 异步批量更新
 - React 响应式支持
 - TypeScript 支持
 
 ## 在线体验
 
-[![Edit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/unshaped-demo-b2tw5)
+[![Edit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io)
 
 ## 安装
 
@@ -17,5 +17,41 @@
 npm install use-immer-state --save
 ```
 
-## 简易上手
+## 极速上手
 
+配合 React Hooks 使用：
+
+```tsx
+import useImmerState from 'use-immer-state'
+
+function App() {
+  const [basket, updateBasket] = useImmerState({
+    fruits: ['apple', 'pear']
+  })
+  const addOrange = () => updateBasket((draft) => {
+    draft.fruits.push('orange')
+  })
+  return (
+    <>
+      <span>fruits: {String(basket.fruits)}</span>
+      <button onClick={addOrange}>Add Orange</button>
+    </>
+  )
+}
+
+export default App
+```
+
+还可以只使用 `produce` 函数：
+
+```tsx
+import { produce } from 'use-immer-state'
+
+const baseState = {
+  fruits: ['apple', 'pear']
+}
+
+const result = produce(baseState, (draft) => {
+  draft.fruits.push('orange')
+})
+```
