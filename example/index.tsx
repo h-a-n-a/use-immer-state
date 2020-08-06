@@ -5,7 +5,7 @@ import useImmerState from '../src'
 const App = () => {
   const [fruit, setFruit] = React.useState('')
   const [country, setCountry] = React.useState('')
-  const [bucket, bucketDraft] = useImmerState({
+  const [bucket, updateBucket] = useImmerState({
     fruits: ['apple', 'pear'],
     countries: ['US', 'UK']
   })
@@ -21,7 +21,9 @@ const App = () => {
         />
         <button
           onClick={() => {
-            bucketDraft.fruits.push(fruit)
+            updateBucket((draft) => {
+              draft.fruits.push(fruit)
+            })
             setFruit('')
           }}
         >
@@ -38,7 +40,9 @@ const App = () => {
         />
         <button
           onClick={() => {
-            bucketDraft.countries.push(country)
+            updateBucket((draft) => {
+              draft.countries.push(country)
+            })
             setCountry('')
           }}
         >
