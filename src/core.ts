@@ -3,14 +3,18 @@ import { is } from './utils'
 
 const INTERNAL_STATE: unique symbol = Symbol()
 
-function produce<T extends BaseState>(baseState: T, draft: (draft: T) => void): T {
+function produce<T extends BaseState>(baseState: T, producer: (draft: T) => void): T {
   const proxy = toProxy(baseState)
-  draft(proxy)
-  const baseInternalState = proxy[INTERNAL_STATE as any]
+  producer(proxy)
+  const baseInternalState = proxy[INTERNAL_STATE as any] as InternalState<T>
   return baseInternalState.mutated ? baseInternalState.draftedState : baseState
 }
 
-function toProxy<T extends BaseState>(baseState: T, invokeParentToCopy?: () => void): T {
+function toProxy<T extends BaseState>(
+  baseState: T,
+  invokeParentToCopy?: () => void,
+  onBaseStateMutation?: () => void
+): T {
   let internalState: InternalState<T>
   const { keyToProxy, originalState } = (internalState = {
     originalState: baseState as T,
@@ -19,8 +23,9 @@ function toProxy<T extends BaseState>(baseState: T, invokeParentToCopy?: () => v
     mutated: false
   })
   return new Proxy(baseState, {
-    get(target, key: keyof T): ValueType<T> | InternalState<T> {
+    get(target, key: keyof T | typeof INTERNAL_STATE): ValueType<T> | InternalState<T> {
       if (key === INTERNAL_STATE) {
+        const a = key
         return internalState
       }
       const value = target[key]
@@ -33,19 +38,21 @@ function toProxy<T extends BaseState>(baseState: T, invokeParentToCopy?: () => v
 
       function invokeParentOnChildMutation(): void {
         internalState.mutated = true
-        const proxyOfChild: any = keyToProxy[key]
+        const proxyOfChild: any = keyToProxy[key as keyof T]
         // Get updated draftedState from child
         const { draftedState: childDraftedState } = proxyOfChild[INTERNAL_STATE]
         // Modify child value to key of child
-        internalState.draftedState[key] = childDraftedState
+        internalState.draftedState[key as keyof T] = childDraftedState
         // Chain parent callbacks
-        invokeParentToCopy && invokeParentToCopy()
+        invokeParentToCopy?.()
+        // Trigger on base-state mutations detected
+        onBaseStateMutation?.()
       }
     },
-    set(target, key, value): boolean {
+    set(target, key: keyof T, value: ValueType<T>): boolean {
       internalState.mutated = true
       copyTargetOnWrite(target, key, value, internalState)
-      invokeParentToCopy && invokeParentToCopy()
+      invokeParentToCopy?.()
       return true
     }
   })
@@ -53,8 +60,8 @@ function toProxy<T extends BaseState>(baseState: T, invokeParentToCopy?: () => v
 
 function copyTargetOnWrite<T extends BaseState>(
   target: T,
-  key: PropertyKey,
-  value: any,
+  key: keyof T,
+  value: ValueType<T>,
   internalState: InternalState<T>
 ): void {
   const { draftedState } = internalState
@@ -64,4 +71,4 @@ function copyTargetOnWrite<T extends BaseState>(
   internalState.draftedState[key as keyof T] = value
 }
 
-export { produce }
+export { produce, toProxy, INTERNAL_STATE }
