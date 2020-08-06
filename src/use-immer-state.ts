@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { toProxy, INTERNAL_STATE } from './core'
-import { BaseState, InternalState } from './types'
+import { BaseState } from './types'
 import { is } from './utils'
 
 function useImmerState<T extends BaseState>(
@@ -14,7 +14,7 @@ function useImmerState<T extends BaseState>(
     isUpdatingRef.current = true
     Promise.resolve().then(() => {
       isUpdatingRef.current = false
-      const internalState = draftRef.current[INTERNAL_STATE as any] as InternalState<T>
+      const internalState = draftRef.current[INTERNAL_STATE]!
       const newState = internalState.draftedState
       setState(() => {
         return (is.array(newState) ? [...newState] : { ...newState }) as T

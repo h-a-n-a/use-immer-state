@@ -1,6 +1,6 @@
 {
   "name": "use-immer-state",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Light weight immer with React reactivity",
   "main": "dist/index.js",
   "scripts": {
@@ -8,9 +8,11 @@
     "example": "parcel ./example/index.html",
     "fix": "eslint --fix **/*.ts",
     "fix:format": "prettier --check **/*.{md,json,ts}",
-    "type": "tsc --project tsconfig.json --skipLibCheck --noEmit",
-    "postinstall": "npm link && npm link use-immer-state"
+    "type": "tsc --project tsconfig.json --skipLibCheck --noEmit"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/h-a-n-a/useImmerState.git"
@@ -38,6 +40,7 @@
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "standard-version": "^8.0.2",
     "typescript": "^3.9.7"
   },
   "peerDependencies": {

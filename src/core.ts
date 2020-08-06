@@ -6,7 +6,7 @@ const INTERNAL_STATE: unique symbol = Symbol()
 function produce<T extends BaseState>(baseState: T, producer: (draft: T) => void): T {
   const proxy = toProxy(baseState)
   producer(proxy)
-  const baseInternalState = proxy[INTERNAL_STATE as any] as InternalState<T>
+  const baseInternalState = proxy[INTERNAL_STATE]!
   return baseInternalState.mutated ? baseInternalState.draftedState : baseState
 }
 
@@ -14,7 +14,9 @@ function toProxy<T extends BaseState>(
   baseState: T,
   invokeParentToCopy?: () => void,
   onBaseStateMutation?: () => void
-): T {
+): T & {
+  [INTERNAL_STATE]?: InternalState<T>
+} {
   let internalState: InternalState<T>
   const { keyToProxy, originalState } = (internalState = {
     originalState: baseState as T,
@@ -25,7 +27,6 @@ function toProxy<T extends BaseState>(
   return new Proxy(baseState, {
     get(target, key: keyof T | typeof INTERNAL_STATE): ValueType<T> | InternalState<T> {
       if (key === INTERNAL_STATE) {
-        const a = key
         return internalState
       }
       const value = target[key]
