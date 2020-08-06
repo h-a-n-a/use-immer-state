@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { render } from 'react-dom'
 import useImmerState from '../src'
-
+const baseState = {
+  fruits: ['apple', 'pear'],
+  others: []
+}
 const App = () => {
   const [fruit, setFruit] = React.useState('')
-  const [country, setCountry] = React.useState('')
-  const [bucket, updateBucket] = useImmerState({
-    fruits: ['apple', 'pear'],
-    countries: ['US', 'UK']
-  })
+  const [basket, updateBasket] = useImmerState(baseState)
   return (
     <>
       <div>
@@ -21,7 +20,7 @@ const App = () => {
         />
         <button
           onClick={() => {
-            updateBucket((draft) => {
+            updateBasket((draft) => {
               draft.fruits.push(fruit)
             })
             setFruit('')
@@ -30,28 +29,9 @@ const App = () => {
           添加
         </button>
       </div>
-      <div>
-        countries:
-        <input
-          value={country}
-          onChange={(e) => {
-            setCountry(e.target.value)
-          }}
-        />
-        <button
-          onClick={() => {
-            updateBucket((draft) => {
-              draft.countries.push(country)
-            })
-            setCountry('')
-          }}
-        >
-          添加
-        </button>
-      </div>
-      <div>raw: {JSON.stringify(bucket)}</div>
-      <div>fruits: {JSON.stringify(bucket.fruits)}</div>
-      <div>countries: {JSON.stringify(bucket.countries)}</div>
+      <div>basket: {JSON.stringify(basket)}</div>
+      <div>fruits: {String(basket.fruits)}</div>
+      <div>are others equal: {String(baseState.others === basket.others)}</div>
     </>
   )
 }

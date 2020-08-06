@@ -1,6 +1,5 @@
 import { BaseState, InternalState, ValueType } from './types'
 import { is } from './utils'
-
 const INTERNAL_STATE: unique symbol = Symbol()
 
 function produce<T extends BaseState>(baseState: T, producer: (draft: T) => void): T {
@@ -14,9 +13,7 @@ function toProxy<T extends BaseState>(
   baseState: T,
   invokeParentToCopy?: () => void,
   onBaseStateMutation?: () => void
-): T & {
-  [INTERNAL_STATE]?: InternalState<T>
-} {
+): T & { [INTERNAL_STATE]?: InternalState<T> } {
   let internalState: InternalState<T>
   const { keyToProxy, originalState } = (internalState = {
     originalState: baseState as T,
@@ -31,9 +28,7 @@ function toProxy<T extends BaseState>(
       }
       const value = target[key]
       if (is.object(value) || Array.isArray(value)) {
-        return key in keyToProxy
-          ? keyToProxy[key]!
-          : (keyToProxy[key] = toProxy(value, invokeParentOnChildMutation))
+        return key in keyToProxy ? keyToProxy[key]! : (keyToProxy[key] = toProxy(value, invokeParentOnChildMutation))
       }
       return internalState.mutated ? internalState.draftedState[key] : originalState[key]
 

@@ -1,15 +1,15 @@
-# use-immer-state
+# useImmerState
 
-> 使用 Immer
+> 编写对象，由繁入简
 
 ## 特性
-- 小于 70 行实现 Immer 核心，draft 异步批量更新
+- 70 行实现 Immer 核心，draft 异步批量更新
 - React 响应式支持
 - TypeScript 支持
 
 ## 在线体验
 
-[![Edit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io)
+[![Edit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/use-immer-state-demo-wh6dm)
 
 ## 安装
 

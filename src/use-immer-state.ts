@@ -3,9 +3,7 @@ import { toProxy, INTERNAL_STATE } from './core'
 import { BaseState } from './types'
 import { is } from './utils'
 
-function useImmerState<T extends BaseState>(
-  baseState: T
-): [T, (producer: (draft: T) => void) => void] {
+function useImmerState<T extends BaseState>(baseState: T): [T, (producer: (draft: T) => void) => void] {
   const [state, setState] = useState(baseState)
   const isUpdatingRef = useRef(false)
 
