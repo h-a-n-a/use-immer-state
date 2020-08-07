@@ -16,8 +16,8 @@ function toProxy<T extends BaseState>(
 ): T & { [INTERNAL_STATE]?: InternalState<T> } {
   let internalState: InternalState<T>
   const { keyToProxy, originalState } = (internalState = {
-    originalState: baseState as T,
-    draftedState: is.array(baseState) ? ([...baseState] as T) : ({ ...baseState } as T),
+    originalState: baseState,
+    draftedState: createDraftStateFromOriginalState(),
     keyToProxy: {} as InternalState<T>['keyToProxy'],
     mutated: false
   })
@@ -27,11 +27,15 @@ function toProxy<T extends BaseState>(
         return internalState
       }
       const value = target[key]
-      if (is.object(value) || Array.isArray(value)) {
+      if (is.object(value) || is.array(value) || is.map(value) || is.set(value)) {
         return key in keyToProxy ? keyToProxy[key]! : (keyToProxy[key] = toProxy(value, invokeParentOnChildMutation))
+      } else if (is.function(value)) {
+        // Cater for add, set, ...etc of Set, Map
+        internalState.mutated = true
+        invokeParentToCopy?.()
+        return (value as Function).bind(internalState.draftedState)
       }
       return internalState.mutated ? internalState.draftedState[key] : originalState[key]
-
       function invokeParentOnChildMutation(): void {
         internalState.mutated = true
         const proxyOfChild: any = keyToProxy[key as keyof T]
@@ -52,6 +56,18 @@ function toProxy<T extends BaseState>(
       return true
     }
   })
+  function createDraftStateFromOriginalState(): T {
+    if (is.array(baseState)) {
+      return [...baseState] as T
+    } else if (is.object(baseState)) {
+      return { ...baseState } as T
+    } else if (is.map(baseState)) {
+      return new Map(baseState) as T
+    } else if (is.set(baseState)) {
+      return new Set(baseState) as T
+    }
+    return {} as T
+  }
 }
 
 function copyTargetOnWrite<T extends BaseState>(

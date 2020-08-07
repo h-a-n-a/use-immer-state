@@ -1,4 +1,4 @@
-export type BaseState = Array<any> | Record<PropertyKey, any>
+export type BaseState = Array<any> | Record<PropertyKey, any> | Map<any, any> | Set<any>
 export interface InternalState<T extends BaseState> {
   originalState: T
   draftedState: T
