@@ -3,8 +3,8 @@
 > 编写对象，由繁入简
 
 ## 特性
-- 70 行实现 Immer 核心，draft 异步批量更新
-- React 响应式支持
+- 完整、轻量级实现 Immer 核心
+- React 异步响应式驱动
 - TypeScript 支持
 
 ## 在线体验

@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useImmerState 1`] = `
+<DocumentFragment>
+  <div>
+    fruits:
+    <button>
+      Add
+    </button>
+  </div>
+  <span
+    data-testid="basket"
+  >
+    {"fruits":["apple","pear"],"others":[]}
+  </span>
+  <span
+    data-testid="fruits"
+  >
+    apple,pear
+  </span>
+  <span
+    data-testid="equal"
+  >
+    true
+  </span>
+</DocumentFragment>
+`;
+
+exports[`useImmerState 2`] = `
+<DocumentFragment>
+  <div>
+    fruits:
+    <button>
+      Add
+    </button>
+  </div>
+  <span
+    data-testid="basket"
+  >
+    {"fruits":["apple","pear","orange"],"others":[]}
+  </span>
+  <span
+    data-testid="fruits"
+  >
+    apple,pear,orange
+  </span>
+  <span
+    data-testid="equal"
+  >
+    true
+  </span>
+</DocumentFragment>
+`;
