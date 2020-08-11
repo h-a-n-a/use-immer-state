@@ -5,18 +5,12 @@ import { is } from './utils'
 
 function useImmerState<T extends BaseState>(baseState: T): [T, (producer: (draft: T) => void) => void] {
   const [state, setState] = useState(baseState)
-  const isUpdatingRef = useRef(false)
 
   const onBaseStateMutation = () => {
-    if (isUpdatingRef.current) return
-    isUpdatingRef.current = true
-    Promise.resolve().then(() => {
-      isUpdatingRef.current = false
-      const internalState = draftRef.current[INTERNAL_STATE]!
-      const newState = internalState.draftedState
-      setState(() => {
-        return (is.array(newState) ? [...newState] : { ...newState }) as T
-      })
+    const internalState = draftRef.current[INTERNAL_STATE]!
+    const newState = internalState.draftedState
+    setState(() => {
+      return (is.array(newState) ? [...newState] : { ...newState }) as T
     })
   }
 

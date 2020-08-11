@@ -1,6 +1,6 @@
 {
   "name": "use-immer-state",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Light weight immer with React reactivity",
   "main": "dist/index.js",
   "scripts": {
