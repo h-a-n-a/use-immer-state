@@ -1,4 +1,4 @@
-# useImmerState
+# use-immer-state
 
 > 编写对象，由繁入简
 
